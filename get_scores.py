@@ -20,7 +20,7 @@ client = Client(transport=transport, fetch_schema_from_transport=True)
 
 # Retrieving the teams from the DB
 players_df = pd.read_csv("sorare_players.csv")
-players_df = players_df.iloc[3000:3500,]
+players_df = players_df.iloc[8500:,]
 
 query_text = queries.query_player_scores
 
@@ -51,12 +51,15 @@ for index, row in players_df.iterrows():
     query = gql(query_text.replace("player-slug", row["slug"]))
     data = client.execute(query)
     iterate_over_players(data, row["player_id"])
-
+    if (index % 500 == 0) & (index !=0):
+        print(f"Done {index} players")
+        time.sleep(600)
 
 
 
 df = pd.DataFrame(players)  # Saving all the players in a SQL database
 df.to_csv(
-    "sorare_players_scores1.csv",
-    mode = "a"
+    "sorare_players_scores.csv",
+   mode = "a",
+   header=False
 )

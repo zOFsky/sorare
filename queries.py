@@ -1,18 +1,26 @@
-query_get_scores = """
+query_get_players = """
 {
   club(slug: "team_slug"){
     players(after: null){
       nodes{
           id
           displayName
+          age
+          position
           slug
-        activeClub{
+        activeClub
+        {
           name
-        }
-        allSo5Scores(last: 20){
-          nodes{
-            score
+          domesticLeague{
+            country{
+              threeLetterCode
+            }
+            displayName
           }
+        }
+        cardSupply{
+          rare
+          limited
         }
       }
       pageInfo{
@@ -39,3 +47,69 @@ query_player_scores = """
     }
   }
 }"""
+
+query_player_prices = """
+{
+  player(slug: "player-slug"){
+    id
+    age
+    position
+    cards(ownedSinceAfter:"isotime",rarities: limited){
+      nodes{
+        rarity
+        notContractOwners{
+          price
+          priceInFiat{
+						usd
+          }
+          transferType
+          from
+        }       
+      }
+      pageInfo{
+          endCursor
+        	hasNextPage
+      }
+    }
+  }
+}"""
+
+query_players = """
+{
+  club(slug: "team_slug"){
+    players(after: null){
+      nodes{
+          id
+          displayName
+          slug
+        activeClub{
+          name
+        }
+        cardSupply{
+          rare
+          limited
+        }
+      }
+      pageInfo{
+          endCursor
+        	hasNextPage
+      }
+    }
+  }
+}
+"""
+
+query_clubs = """
+{
+  clubsReady{
+    slug
+    name
+    domesticLeague{
+      country{
+        code
+      }
+      name
+    }
+  }
+}
+"""
